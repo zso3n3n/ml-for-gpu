@@ -5,7 +5,7 @@
 .env
 
 # data dir
-data/
+data
 
 # mlruns
 mlruns/
@@ -135,7 +135,6 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
 venv/
 ENV/
 env.bak/
