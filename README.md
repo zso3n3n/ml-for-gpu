@@ -1,1 +1,1 @@
-# az-py-project-template
+# Accelerate ML & OR with GPUs
