@@ -4,6 +4,9 @@
 # env file
 .env
 
+# data dir
+data/
+
 # mlruns
 mlruns/
 
