@@ -1,0 +1,16 @@
+name: rapids-sklearn-cu12
+channels: [conda-forge]
+dependencies:
+  - python=3.10
+  - ipykernel
+  - scipy
+  - pandas
+  - scikit-learn
+  - pyarrow
+  - fsspec
+  - python-dotenv
+  - mlflow
+  - pip
+  - pip:
+      - azure-ai-ml
+      - ortools
