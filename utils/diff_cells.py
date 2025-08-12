@@ -1,5 +1,6 @@
 import difflib
 from IPython import get_ipython
+
 def _clean(src: str):
     out=[]
     for l in src.splitlines():
