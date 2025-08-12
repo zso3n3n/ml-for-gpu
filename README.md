@@ -41,13 +41,22 @@ Update `.env` with your Azure ML details
 #### Download datasets:
 
 ```bash
+source .env
 mkdir data
+mkdir data/avazu
 mkdir data/vrptw/homberger/c2
 mkdir data/vrptw/homberger/rc2
 
-# Avazu CTR dataset
-curl -L -o data/avazu-ctr-prediction-with-random-50k-rows.zip\
+# Avazu CTR dataset - you will need to accept the competition rules and create a kaggle accoutn to access to full ~40M row dataset
+curl -L -C - --fail \
+--user "$KAGGLE_USERNAME:$KAGGLE_KEY" \
+"https://www.kaggle.com/api/v1/competitions/data/download/avazu-ctr-prediction/train.gz" \
+-o data/avazu/avazu-ctr.gz
+
+# Avazu CTR dataset - 50k row subsample for testing
+curl -L -o data/avazu/avazu-ctr-50k.zip \
 https://www.kaggle.com/api/v1/datasets/download/gauravduttakiit/avazu-ctr-prediction-with-random-50k-rows
+
 
 # Homberger 100 customer instance (RC2)
 wget -c -O data/vrptw/homberger/rc2/homberger_1000_customer_instances.zip \ 
@@ -134,10 +143,14 @@ ml-for-gpu/
 
 **Base Image**: [`rapidsai/rapidsai:cuda11.8-runtime-ubuntu22.04-py3.10`](https://hub.docker.com/layers/rapidsai/rapidsai/cuda11.8-runtime-ubuntu22.04-py3.10/images/sha256-60e3ae97db947a237e5de571a92a37437174f983dd1c31e3cfce2b0afb45d085)
 
-**Key Dependencies**:
-- RAPIDS: cuDF 24.12+, cuML 24.12+
-- CPU: pandas 2.2.2, scikit-learn 1.4.2
-- Optimization: OR-Tools 9.8+, cuOpt (optional)
-- Azure: azure-ai-ml, azure-identity, adlfs
+**Auto Cleanup**:
 
-**Kernel**: AzureML: rapids-sklearn-cu12
+This repo uses pre-commit to automatically clear notebook outputs before commit. The [pre-commit-config.yaml](./pre-commit-config.yaml) file has been provided for you
+
+```bash
+pip install pre-commit  
+pre-commit install  
+pre-commit autoupdate  
+```
+
+
