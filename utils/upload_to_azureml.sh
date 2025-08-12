@@ -31,10 +31,6 @@ sas=$(az storage blob generate-sas \
   --expiry $exp_date \
   -o tsv)
 
-echo "Uploading..."
-echo "Source: $LOCAL_FILE"
-echo "Destination: https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/${FILE_NAME}"
-
 azcopy copy \
   "$LOCAL_FILE" \
   "https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER_NAME}/${FILE_NAME}?${sas}" \
