@@ -60,7 +60,7 @@ curl -L -o data/avazu/avazu-ctr-50k.zip \
 https://www.kaggle.com/api/v1/datasets/download/gauravduttakiit/avazu-ctr-prediction-with-random-50k-rows
 
 
-# Homberger 100 customer instance (RC2)
+# Homberger 1000 customer instance (RC2)
 wget -c -O data/vrptw/homberger/rc2/homberger_1000_customer_instances.zip \ 
 "https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip"
 

@@ -1,17 +1,16 @@
-FROM rapidsai/notebooks:24.12a-cuda12.0-py3.11
+# RAPIDS notebooks with pandas 2.x support
+FROM rapidsai/notebooks:24.12a-cuda12.0-py3.12
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Add jupyterlab explicitly and keep everything in base
+# Add extras, but keep RAPIDS pins intact
 RUN mamba install -y -n base -c conda-forge --freeze-installed \
-    pandas jupyterlab ipykernel \
-    scipy scikit-learn pyarrow fsspec python-dotenv mlflow cuopt \
+      jupyterlab ipykernel scikit-learn pyarrow fsspec python-dotenv mlflow \
  && mamba clean -y --all
 
-RUN python -m pip install --no-cache-dir \
-    azure-ai-ml ortools adlfs pre-commit nbstripout
-
-RUN python -m ipykernel install --user --name=rpd-sk --display-name "rpd-sk"
-
-COPY . /home/rapids/notebooks/ml-for-gpu
-WORKDIR /home/rapids/notebooks/ml-for-gpu
+# cuOpt server + client (Py3.12-supported builds)
+RUN mamba install -y -n base --override-channels -c rapidsai -c nvidia -c conda-forge \
+      --freeze-installed --strict-channel-priority \
+      cuopt-server=25.* cuopt-sh-client=25.* \
+ && mamba clean -y --all \
+ && python -m ipykernel install --sys-prefix --name=rpd-sk --display-name "rpd-sk"
