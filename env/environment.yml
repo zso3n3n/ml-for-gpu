@@ -1,5 +1,0 @@
-$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
-name: rapids-sklearn-cu12
-description: RAPIDS (cuDF/cuML) + scikit-learn + OR-Tools for CPU/GPU demos
-image: rapidsai/rapidsai:cuda11.8-runtime-ubuntu22.04-py3.10
-conda_file: conda-rapids-sklearn.yml

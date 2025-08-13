@@ -38,39 +38,14 @@ Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn,
 
 Update `.env` with your Azure ML details
 
-#### Setup Compute Instance on AzureML (GPU accelerated)
-
-1. Spin up compute instance (NC-A100 shown)
-
-2. Navigate to AzureML Workspace --> Compute --> Launch VS Code (or editor of choice)
-
-3. Clone this repo onto the host
-
-4. Setup container:
-
-```bash
-cd <path/to/repo>
-docker build -t rapids-dev:cu118 .
-docker run -d --name rapids-dev --gpus all \
-  -p 8890:8888 \
-  -v $PWD:/workspace \
-  -v rapids_conda:/opt/conda \
-  my-rapids-sklearn:cu118  
-```
-
-5. Setup notebook kernel:
-
-```bash
-docker exec -it rapids-dev jupyter server list
-```
-When selecting the kernel in the .ipynb select the "Existing Jupyter Server" --> http://127.0.0.1:8890 --> 'rapids-k'
-
 #### Download datasets:
 
 ```bash
 source .env
 mkdir data
 mkdir data/avazu
+mkdir data/vrptw
+mkdir data/vrptw/homberger
 mkdir data/vrptw/homberger/c2
 mkdir data/vrptw/homberger/rc2
 
@@ -100,16 +75,32 @@ Upload to AzureML and register as a Data Asset
 ./utils/upload_to_azureml.sh <LOCAL_PATH> "<DESCRIPTION>"   
 ```
 
-#### Register the Azure ML environment:
+#### Setup Compute Instance on AzureML (GPU accelerated)
+
+1. Spin up compute instance (NC-A100 shown)
+
+2. Navigate to AzureML Workspace --> Compute --> Launch VS Code (or editor of choice)
+
+3. Clone this repo onto the host
+
+4. Setup container:
 
 ```bash
-# Configure Azure CLI (if not already done)
-az login
-az account set --subscription "your-subscription-id"
+cd <path/to/repo>
+docker build --no-cache -t rapids-sklearn:cu122 .
+docker run -d --name rapid-sk --gpus all -p 8890:8888 rapids-sklearn:cu122
+```
 
-# Register environment
-```bash 
-./utils/register_env.sh  
+5. Setup notebook kernel:
+
+When selecting the kernel in the .ipynb select the "Existing Jupyter Server" --> http://127.0.0.1:8890 --> 'rpd-sk'
+
+__For Later__ - __Cleanup Commands__
+
+```bash
+docker stop rapid-sk && docker rm rapid-sk
+docker rmi rapids-sklearn:cu122
+docker system prune -a --volumes
 ```
 
 ### 3. Run Notebooks
