@@ -61,18 +61,11 @@ https://www.kaggle.com/api/v1/datasets/download/gauravduttakiit/avazu-ctr-predic
 
 
 # Homberger 1000 customer instance (RC2)
-wget -c -O data/vrptw/homberger/rc2/homberger_1000_customer_instances.zip \ 
-"https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip"
+wget -c -O data/vrptw/homberger/rc2/homberger_1000_customer_instances.zip "https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip"
 
 # Homberger 200 customer instance - smaller for testing (C2)
 wget -c -O data/vrptw/homberger/c2/homberger_200_customer_instances.zip \
 "https://www.sintef.no/globalassets/project/top/vrptw/homberger/200/homberger_200_customer_instances.zip"  
-```
-
-#### Upload datasets to AzureML
-Upload to AzureML and register as a Data Asset
-```bash
-./utils/upload_to_azureml.sh <LOCAL_PATH> "<DESCRIPTION>"   
 ```
 
 #### Setup Compute Instance on AzureML (GPU accelerated)
