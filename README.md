@@ -80,8 +80,8 @@ wget -c -O data/vrptw/homberger/c2/homberger_200_customer_instances.zip \
 
 ```bash
 cd <path/to/repo>
-docker build --no-cache -t rapids-sklearn:cu122 .
-docker run -d --name rapid-sk --gpus all -p 8890:8888 rapids-sklearn:cu122
+docker build --no-cache -t rapids-sklearn:cu120 .
+docker run -d --name rapid-sk --gpus all -p 8890:8888 rapids-sklearn:cu120
 ```
 
 5. Setup notebook kernel:
@@ -92,7 +92,7 @@ __For Later__ - __Cleanup Commands__
 
 ```bash
 docker stop rapid-sk && docker rm rapid-sk
-docker rmi rapids-sklearn:cu122
+docker rmi rapids-sklearn:cu120
 docker system prune -a --volumes
 ```
 

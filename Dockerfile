@@ -1,16 +1,21 @@
-# RAPIDS notebooks with pandas 2.x support
-FROM rapidsai/notebooks:24.12a-cuda12.0-py3.12
+FROM rapidsai/notebooks:24.10a-cuda12.2-py3.10
 
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Add extras, but keep RAPIDS pins intact
+# Keep everything in base; don't break RAPIDS deps
 RUN mamba install -y -n base -c conda-forge --freeze-installed \
-      jupyterlab ipykernel scikit-learn pyarrow fsspec python-dotenv mlflow \
+      "pandas>=2" ipykernel scipy scikit-learn pyarrow fsspec python-dotenv mlflow \
  && mamba clean -y --all
 
-# cuOpt server + client (Py3.12-supported builds)
-RUN mamba install -y -n base --override-channels -c rapidsai -c nvidia -c conda-forge \
-      --freeze-installed --strict-channel-priority \
-      cuopt-server=25.* cuopt-sh-client=25.* \
- && mamba clean -y --all \
- && python -m ipykernel install --sys-prefix --name=rpd-sk --display-name "rpd-sk"
+# cuOpt server + client (you only need client if you call a sidecar server;
+# if you're using the in-process solver APIs, this still doesn't hurt)
+RUN python -m pip install --no-cache-dir --extra-index-url https://pypi.nvidia.com \
+      cuopt-server-cu12 cuopt-sh-client
+
+# Register a kernel inside the container (nice-to-have, not required for docker-kernel mode)
+RUN python -m ipykernel install --sys-prefix --name=cu-sk --display-name="cu-sk"
+
+COPY . /home/rapids/notebooks/ml-for-gpu
+WORKDIR /home/rapids/notebooks/ml-for-gpu
