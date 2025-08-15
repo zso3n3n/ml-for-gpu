@@ -1,0 +1,23 @@
+name: rapids-sk
+channels:
+  - rapidsai
+  - conda-forge
+  - nvidia
+dependencies:
+  - python=3.11
+  - cuda-version=12.2
+  - rapids=24.10
+  - pandas
+  - scipy
+  - scikit-learn
+  - pyarrow
+  - python-dotenv
+  - ipykernel
+  - jupyter
+  - numba>=0.57
+  - pip
+  - pip:
+    - pre-commit
+    - nbstripout
+variables:
+  NUMBA_CUDA_ENABLE_PYNVJITLINK: "0"

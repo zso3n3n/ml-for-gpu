@@ -1,0 +1,19 @@
+name: cuopt-or
+channels:
+  - conda-forge
+  - nvidia
+dependencies:
+  - python=3.11
+  - cuda-version=12.2
+  - numpy
+  - pandas
+  - pyarrow
+  - python-dotenv
+  - ipykernel
+  - jupyter
+  - pip
+  - pip:
+    - --extra-index-url https://pypi.nvidia.com
+    - cuopt-cu12
+    - cudf-cu12
+    - ortools

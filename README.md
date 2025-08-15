@@ -30,11 +30,10 @@ Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn,
 - **Schema**: customer_id, x, y, demand, tw_start, tw_end, service_time
 - **Solvers**: OR-Tools → cuOpt
 - **Instances**: RC2 (200-1000 customers)
-
+---
 ## 🚀 Quick Start
 
-### 1. Environment Setup
-
+#### Environment Setup
 
 Update `.env` with your Azure ML details
 
@@ -42,29 +41,25 @@ Update `.env` with your Azure ML details
 
 ```bash
 source .env
-mkdir data
-mkdir data/avazu
-mkdir data/vrptw
-mkdir data/vrptw/homberger
-mkdir data/vrptw/homberger/c2
-mkdir data/vrptw/homberger/rc2
+mkdir classification/data
+mkdir optimization/data
 
 # Avazu CTR dataset - you will need to accept the competition rules and create a kaggle accoutn to access to full ~40M row dataset
 curl -L -C - --fail \
 --user "$KAGGLE_USERNAME:$KAGGLE_KEY" \
 "https://www.kaggle.com/api/v1/competitions/data/download/avazu-ctr-prediction/train.gz" \
--o data/avazu/avazu-ctr.gz
+-o classification/data/avazu-ctr.gz
 
 # Avazu CTR dataset - 50k row subsample for testing
-curl -L -o data/avazu/avazu-ctr-50k.zip \
+curl -L -o classification/data/avazu-ctr-50k.zip \
 https://www.kaggle.com/api/v1/datasets/download/gauravduttakiit/avazu-ctr-prediction-with-random-50k-rows
 
 
 # Homberger 1000 customer instance (RC2)
-wget -c -O data/vrptw/homberger/rc2/homberger_1000_customer_instances.zip "https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip"
+wget -c -O optimization/data/homberger_1000_customer_instances.zip "https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip"
 
 # Homberger 200 customer instance - smaller for testing (C2)
-wget -c -O data/vrptw/homberger/c2/homberger_200_customer_instances.zip \
+wget -c -O optimization/data/homberger_200_customer_instances.zip \
 "https://www.sintef.no/globalassets/project/top/vrptw/homberger/200/homberger_200_customer_instances.zip"  
 ```
 
@@ -74,38 +69,28 @@ wget -c -O data/vrptw/homberger/c2/homberger_200_customer_instances.zip \
 
 2. Navigate to AzureML Workspace --> Compute --> Launch VS Code (or editor of choice)
 
-3. Clone this repo onto the host
+3. Navigate to terminal - clone this repo onto the host
 
-4. Setup container:
-
-```bash
-cd <path/to/repo>
-docker build --no-cache -t rapids-sklearn:cu120 .
-docker run -d --name rapid-sk --gpus all -p 8890:8888 rapids-sklearn:cu120
-```
-
-5. Setup notebook kernel:
-
-When selecting the kernel in the .ipynb select the "Existing Jupyter Server" --> http://127.0.0.1:8890 --> 'rpd-sk'
-
-__For Later__ - __Cleanup Commands__
+#### Setup Notebook Kernels
 
 ```bash
-docker stop rapid-sk && docker rm rapid-sk
-docker rmi rapids-sklearn:cu120
-docker system prune -a --volumes
+cd <path to repo>
+conda install mamba -n base -c conda-forge
+
+# Create environment and install kernels
+mamba env create -f classification/rapids-sk.yml
+mamba run -n rapids-sk python -m ipykernel install --user --name rapids-sk --display-name "rapids-sk"
+
+mamba env create -f optimization/cuopt-or.yml
+mamba run -n cuopt-or python -m ipykernel install --user --name cuopt-or --display-name "cuopt-or"
+
+# Validate exists
+jupyter kernelspec list
 ```
+__Note: You may have to reload window for new kernels to showup in your notebook__
 
-### 3. Run Notebooks
-
-In Azure ML Studio:
-
-1. Open Compute Instance with NC_A100
-2. Select kernel: **AzureML: rapids-sklearn-cu12**
-3. Run notebooks:
-   - `notebooks/01_etl_ml_cpu_vs_gpu.ipynb`
-   - `notebooks/02_optimization_vrptw.ipynb`
-
+#### Run Notebooks
+---
 ## 📁 Directory Structure
 
 ```
@@ -149,7 +134,7 @@ ml-for-gpu/
 - Convert Homberger VRPTW instances (.txt) to Parquet + JSON
 - Extract from ZIP archives
 - Generate Azure ML-compatible data assets
-
+---
 ## 🔧 Environment Details
 
 **Base Image**: [`rapidsai/rapidsai:cuda11.8-runtime-ubuntu22.04-py3.10`](https://hub.docker.com/layers/rapidsai/rapidsai/cuda11.8-runtime-ubuntu22.04-py3.10/images/sha256-60e3ae97db947a237e5de571a92a37437174f983dd1c31e3cfce2b0afb45d085)
