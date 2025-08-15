@@ -5,31 +5,33 @@ Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn,
 ## 🎯 Objectives
 
 - **ETL + ML**: pandas → cuDF, sklearn → cuML on Avazu CTR dataset
-- **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger RC2)
-- **Speedup**: 20-50× acceleration across read, ETL, fit, predict, solve stages
+- **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger dataset)
+- **Speedup**: 10-50× acceleration across read, ETL, fit, predict, solve stages
 - **Model Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
 - **Migration Effort**: ≤5 lines changed per notebook
 
 ## 🏗️ Architecture
 
-- **Compute**: Azure ML Compute Instance (NC_A100)
-- **Environment**: Single RAPIDS-based environment for CPU/GPU workflows
-- **Data**: Azure ML Data Assets (uri_file, ADLS Gen2)
+- **Compute**: Azure ML Compute Instance (NC_A100 recommended)
+- **Environment**: Conda-based RAPIDS environments for CPU/GPU workflows
+- **Kernels**: Separate Jupyter kernels for classification and optimization
+- **Data**: Local files with Azure ML Data Assets support
 - **Auth**: DefaultAzureCredential + .env configuration
 
 ## 📊 Datasets
 
 ### Avazu CTR (ETL + ML)
-- **Format**: Single Parquet file (~40M rows)
+- **Format**: Single Parquet file (~40M rows) or 50k sample
 - **Target**: Binary click prediction (0/1)
 - **Features**: hour_of_day, frequency encoding for categoricals
 - **Models**: Logistic Regression (sklearn → cuML)
 
 ### Gehring & Homberger VRPTW (Optimization)
-- **Format**: Customers Parquet + Parameters JSON
+- **Format**: ZIP archives with .txt instance files
 - **Schema**: customer_id, x, y, demand, tw_start, tw_end, service_time
-- **Solvers**: OR-Tools → cuOpt
-- **Instances**: RC2 (200-1000 customers)
+- **Solvers**: OR-Tools (CPU) → cuOpt (GPU)
+- **Instances**: C2 (200 customers), RC2 (1000 customers)
+
 ---
 ## 🚀 Quick Start
 
@@ -65,11 +67,10 @@ wget -c -O optimization/data/homberger_200_customer_instances.zip \
 
 #### Setup Compute Instance on AzureML (GPU accelerated)
 
-1. Spin up compute instance (NC-A100 shown)
-
-2. Navigate to AzureML Workspace --> Compute --> Launch VS Code (or editor of choice)
-
-3. Navigate to terminal - clone this repo onto the host
+1. Create NC_A100 (or similar GPU) Compute Instance
+2. Launch VS Code from Azure ML Studio
+3. Clone this repository in the terminal
+4. Navigate to the project directory
 
 #### Setup Notebook Kernels
 
@@ -89,64 +90,99 @@ jupyter kernelspec list
 ```
 __Note: You may have to reload window for new kernels to showup in your notebook__
 
-#### Run Notebooks
+### 5. Run Notebooks
+
+1. **Classification**: Open `classification/ml_cpu_vs_gpu.ipynb` and select `rapids-sk` kernel
+2. **Optimization**: Open `optimization/02_optimization_vrptw.ipynb` and select `cuopt-or` kernel
+
+Each notebook demonstrates:
+- CPU implementation using standard libraries
+- GPU implementation with minimal code changes
+- Performance comparison and migration analysis
+
 ---
+
 ## 📁 Directory Structure
 
 ```
 ml-for-gpu/
-├── env/
-│   ├── conda-rapids-sklearn.yml    # Conda dependencies
-│   └── environment.yml             # Azure ML environment spec
-├── notebooks/
-│   ├── 01_etl_ml_cpu_vs_gpu.ipynb  # ETL + ML comparison
-│   └── 02_optimization_vrptw.ipynb # VRPTW optimization comparison
-├── utils/
-│   ├── register_env.sh             # Environment registration script
-│   ├── data_access.py              # Azure ML data utilities
-│   ├── timing.py                   # Performance timing utilities
-│   ├── diff_cells.py               # Code diff analysis
-│   └── homberger_to_parquet.py     # VRPTW data converter
-├── data/                           # Local data staging
-│   └── README.md
-├── .env                           # You need to make/populate this
+├── .env                           # Azure ML credentials (create from .sample.env)
+├── .sample.env                    # Template for environment variables
+├── classification/
+│   ├── ml_cpu_vs_gpu.ipynb        # ETL + ML CPU vs GPU comparison
+│   ├── rapids-sk.yml              # Conda environment: RAPIDS + scikit-learn
+│   ├── data/                      # Avazu CTR dataset storage
+│   └── utils/
+│       └── timing.py              # Performance measurement utilities
+├── optimization/
+│   ├── 02_optimization_vrptw.ipynb # VRPTW optimization CPU vs GPU
+│   ├── cuopt-or.yml               # Conda environment: cuOpt + OR-Tools  
+│   ├── data/                      # Homberger VRPTW dataset storage
+│   └── utils/
+│       ├── timing.py              # Performance measurement utilities
+│       └── homberger_to_parquet.py # VRPTW data parsing utilities
 └── README.md
 ```
 
-## 🛠️ Utilities
+## 🛠️ Key Components
 
-### Data Access (`utils/data_access.py`)
-- Resolve Azure ML data assets to ABFSS paths
-- Create storage options with DefaultAzureCredential
-- Handle authentication and path resolution
+### Conda Environments
 
-### Timing (`utils/timing.py`)
-- GPU-aware performance measurement with CUDA synchronization
+**RAPIDS + Scikit-learn** (`classification/rapids-sk.yml`):
+- RAPIDS 24.10 (cuDF, cuML) with CUDA 12.0 support
+- scikit-learn, pandas, numpy for CPU baselines
+- Jupyter kernel for classification notebooks
+
+**cuOpt + OR-Tools** (`optimization/cuopt-or.yml`):
+- cuOpt 25.08.00 for GPU optimization
+- OR-Tools for CPU optimization baselines  
+- RAPIDS 24.10 for DataFrame operations
+- Jupyter kernel for optimization notebooks
+
+### Utilities
+
+**Performance Timing** (`utils/timing.py`):
+- GPU-aware measurement with CUDA synchronization
 - CPU thread limiting for fair comparisons
 - Consistent timing across CPU/GPU workflows
 
-### Code Diff Analysis (`utils/diff_cells.py`)
-- Count lines changed between CPU and GPU implementations
-- Demonstrate minimal migration effort
-- Generate diff reports for documentation
-
-### Data Conversion (`utils/homberger_to_parquet.py`)
-- Convert Homberger VRPTW instances (.txt) to Parquet + JSON
+**VRPTW Data Processing** (`optimization/utils/homberger_to_parquet.py`):
+- Parse Homberger .txt instance files
 - Extract from ZIP archives
-- Generate Azure ML-compatible data assets
+- Convert to pandas/cuDF compatible formats
+
+### Data Flow
+
+1. **Raw Data**: Download datasets from public sources
+2. **Processing**: Parse and convert to analysis-ready formats
+3. **CPU Baseline**: Implement using pandas, sklearn, OR-Tools
+4. **GPU Migration**: Minimal changes to use cuDF, cuML, cuOpt
+5. **Comparison**: Measure speedups and validate solution quality
+
 ---
+
 ## 🔧 Environment Details
 
-**Base Image**: [`rapidsai/rapidsai:cuda11.8-runtime-ubuntu22.04-py3.10`](https://hub.docker.com/layers/rapidsai/rapidsai/cuda11.8-runtime-ubuntu22.04-py3.10/images/sha256-60e3ae97db947a237e5de571a92a37437174f983dd1c31e3cfce2b0afb45d085)
+### Classification Environment (rapids-sk)
+- **Base**: RAPIDS 24.10 with CUDA 12.0
+- **ML Libraries**: cuML 24.10, scikit-learn 1.3+
+- **Data**: cuDF 24.10, pandas 2.0+
+- **Python**: 3.11
 
-**Auto Cleanup**:
+### Optimization Environment (cuopt-or)  
+- **Base**: RAPIDS 24.10 with CUDA 12.2
+- **Optimization**: cuOpt 25.08.00, OR-Tools 9.8+
+- **Data**: cuDF 24.10, pandas 2.0+
+- **Python**: 3.11
 
-This repo uses pre-commit to automatically clear notebook outputs before commit. The [pre-commit-config.yaml](./pre-commit-config.yaml) file has been provided for you
+## 🤝 Contributing
 
+1. Use pre-commit hooks to clear notebook outputs:
 ```bash
-pip install pre-commit  
-pre-commit install  
-pre-commit autoupdate  
+pip install pre-commit
+pre-commit install
 ```
 
-
+2. Test on sample datasets before full-scale runs
+3. Validate GPU acceleration with timing utilities
+4. Ensure CPU/GPU solution parity in tests
