@@ -28,7 +28,7 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 
 | Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
 :--------:|:--------:|:--------:|:--------:|
-Sample  | Nvidia T4 | 2.9x | 
+Sample  | Nvidia T4 | 2.9x | 1.4x
 Sample | Nvidia A100 |
 Full | Nvidia A100 | 
 
