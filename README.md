@@ -4,19 +4,11 @@ Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn,
 
 ## 🎯 Objectives
 
-- **ETL + ML**: pandas → cuDF, sklearn → cuML on Avazu CTR dataset
+Demonstrated performance gains from GPU based libraries - with minimal migration effort.
+
+- **ML - Classification**: pandas → cuDF, sklearn → cuML on Avazu CTR dataset
 - **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger dataset)
-- **Speedup**: 10-50× acceleration across read, ETL, fit, predict, solve stages
-- **Model Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
-- **Migration Effort**: ≤5 lines changed per notebook
-
-## 🏗️ Architecture
-
-- **Compute**: Azure ML Compute Instance (NC_A100 recommended)
-- **Environment**: Conda-based RAPIDS environments for CPU/GPU workflows
-- **Kernels**: Separate Jupyter kernels for classification and optimization
-- **Data**: Local files with Azure ML Data Assets support
-- **Auth**: DefaultAzureCredential + .env configuration
+- **Solution Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
 
 ## 📊 Datasets
 
@@ -32,7 +24,17 @@ Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn,
 - **Solvers**: OR-Tools (CPU) → cuOpt (GPU)
 - **Instances**: C2 (200 customers), RC2 (1000 customers)
 
----
+## Results Summary
+
+| Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
+:--------:|:--------:|:--------:|:--------:|
+Sample  | Nvidia T4 | 2.9x | 
+Sample | Nvidia A100 |
+Full | Nvidia A100 | 
+
+_*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
+_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_
+
 ## 🚀 Quick Start
 
 #### Environment Setup
