@@ -29,11 +29,12 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 | Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
 :--------:|:--------:|:--------:|:--------:|
 Sample  | Nvidia T4 | 2.9x | 1.4x
-Sample | Nvidia A100 |
-Full | Nvidia A100 | 
+Sample | Nvidia A100 | | 2.0x 
+**Full** | **Nvidia A100** |**TBD** | **8.5x**
 
 _*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
 _**Full = Avazu CTR Full & Homberger VRPTW 100 customer_
+_++ = Superior result quality (AUC, Solve Quality, etc.)_
 
 ## 🚀 Quick Start
 
