@@ -1,6 +1,6 @@
 # GPU Acceleration Demo
 
-Demonstrate 20–50× speedups by migrating CPU workflows (pandas, scikit-learn, OR-Tools) to GPU (cuDF, cuML, cuOpt) on Azure ML with minimal code changes.
+Demonstrate incredible performance gains by migrating common ML and OR solutions from CPU to GPU with minimal code changes.
 
 ## 🎯 Objectives
 
@@ -40,7 +40,7 @@ _++ = Superior result quality (AUC, Solve Quality, etc.)_
 
 #### Environment Setup
 
-Update `.env` with your Azure ML details
+Update `.env` according to the provided sample
 
 #### Download datasets:
 
@@ -98,11 +98,6 @@ __Note: You may have to reload window for new kernels to showup in your notebook
 1. **Classification**: Open `classification/ml_cpu_vs_gpu.ipynb` and select `rapids-sk` kernel
 2. **Optimization**: Open `optimization/02_optimization_vrptw.ipynb` and select `cuopt-or` kernel
 
-Each notebook demonstrates:
-- CPU implementation using standard libraries
-- GPU implementation with minimal code changes
-- Performance comparison and migration analysis
-
 ---
 
 ## 📁 Directory Structure
@@ -154,30 +149,6 @@ ml-for-gpu/
 - Extract from ZIP archives
 - Convert to pandas/cuDF compatible formats
 
-### Data Flow
-
-1. **Raw Data**: Download datasets from public sources
-2. **Processing**: Parse and convert to analysis-ready formats
-3. **CPU Baseline**: Implement using pandas, sklearn, OR-Tools
-4. **GPU Migration**: Minimal changes to use cuDF, cuML, cuOpt
-5. **Comparison**: Measure speedups and validate solution quality
-
----
-
-## 🔧 Environment Details
-
-### Classification Environment (rapids-sk)
-- **Base**: RAPIDS 24.10 with CUDA 12.0
-- **ML Libraries**: cuML 24.10, scikit-learn 1.3+
-- **Data**: cuDF 24.10, pandas 2.0+
-- **Python**: 3.11
-
-### Optimization Environment (cuopt-or)  
-- **Base**: RAPIDS 24.10 with CUDA 12.2
-- **Optimization**: cuOpt 25.08.00, OR-Tools 9.8+
-- **Data**: cuDF 24.10, pandas 2.0+
-- **Python**: 3.11
-
 ## 🤝 Contributing
 
 1. Use pre-commit hooks to clear notebook outputs:
@@ -185,7 +156,3 @@ ml-for-gpu/
 pip install pre-commit
 pre-commit install
 ```
-
-2. Test on sample datasets before full-scale runs
-3. Validate GPU acceleration with timing utilities
-4. Ensure CPU/GPU solution parity in tests
