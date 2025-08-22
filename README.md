@@ -33,7 +33,7 @@ Sample | Nvidia A100 | 9.1x | 2.0x
 **Full** | **Nvidia A100** |**1.9x++** | **8.5x**
 
 _*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
-_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_
+_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_  
 _++ = Superior result quality (AUC, Solve Quality, etc.)_
 
 ## 🚀 Quick Start
