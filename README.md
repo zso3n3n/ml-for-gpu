@@ -28,7 +28,7 @@ _++ = Superior result quality (AUC, Solve Quality, etc.)_
 - **Format**: Single Parquet file (~40M rows) or 50k sample
 - **Target**: Binary click prediction (0/1)
 - **Features**: hour_of_day, frequency encoding for categoricals
-- **Models**: Logistic Regression (sklearn → cuML)
+- **Models**: Random Forest Classifier (sklearn → cuML)
 
 ### Gehring & Homberger VRPTW (Optimization)
 - **Format**: ZIP archives with .txt instance files
