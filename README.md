@@ -10,6 +10,18 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 - **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger dataset)
 - **Solution Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
 
+## 🎓 Preliminary Results Summary
+
+| Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
+:--------:|:--------:|:--------:|:--------:|
+Sample  | Nvidia T4 | 2.9x | 1.4x
+Sample | Nvidia A100 | 9.1x | 2.0x 
+**Full** | **Nvidia A100** |**1.9x++** | **8.5x**
+
+_*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
+_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_  
+_++ = Superior result quality (AUC, Solve Quality, etc.)_
+
 ## 📊 Datasets
 
 ### Avazu CTR (ETL + ML)
@@ -23,18 +35,6 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 - **Schema**: customer_id, x, y, demand, tw_start, tw_end, service_time
 - **Solvers**: OR-Tools (CPU) → cuOpt (GPU)
 - **Instances**: C2 (200 customers), RC2 (1000 customers)
-
-## Results Summary
-
-| Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
-:--------:|:--------:|:--------:|:--------:|
-Sample  | Nvidia T4 | 2.9x | 1.4x
-Sample | Nvidia A100 | 9.1x | 2.0x 
-**Full** | **Nvidia A100** |**1.9x++** | **8.5x**
-
-_*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
-_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_  
-_++ = Superior result quality (AUC, Solve Quality, etc.)_
 
 ## 🚀 Quick Start
 
