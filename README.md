@@ -29,8 +29,8 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 | Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
 :--------:|:--------:|:--------:|:--------:|
 Sample  | Nvidia T4 | 2.9x | 1.4x
-Sample | Nvidia A100 | | 2.0x 
-**Full** | **Nvidia A100** |**TBD** | **8.5x**
+Sample | Nvidia A100 | 9.1x | 2.0x 
+**Full** | **Nvidia A100** |**1.9x++** | **8.5x**
 
 _*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
 _**Full = Avazu CTR Full & Homberger VRPTW 100 customer_
@@ -113,7 +113,7 @@ ml-for-gpu/
 │   └── utils/
 │       └── timing.py              # Performance measurement utilities
 ├── optimization/
-│   ├── 02_optimization_vrptw.ipynb # VRPTW optimization CPU vs GPU
+│   ├── optimization_vrptw.ipynb # VRPTW optimization CPU vs GPU
 │   ├── cuopt-or.yml               # Conda environment: cuOpt + OR-Tools  
 │   ├── data/                      # Homberger VRPTW dataset storage
 │   └── utils/
