@@ -10,8 +10,8 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 - **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger dataset)
 - **Solution Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
 
-## 🎓 Preliminary Results Summary
-
+## 🎓 Preliminary Results Summary  
+  
 | Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
 :--------:|:--------:|:--------:|:--------:|
 Sample  | Nvidia T4 | 2.9x | 1.4x
