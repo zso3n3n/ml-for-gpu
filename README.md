@@ -12,15 +12,16 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 
 ## 🎓 Preliminary Results Summary  
   
-| Dataset | GPU Type | Optimization Speedup | ML Classification Speedup|
-:--------:|:--------:|:--------:|:--------:|
-Sample  | Nvidia T4 | 2.9x | 1.4x
-Sample | Nvidia A100 | 9.1x | 2.0x 
-**Full** | **Nvidia A100** |**1.9x++** | **8.5x**
+| Dataset | GPU Type | Optimization Speedup | ML Classification Speedup |
+|:-------:|:--------:|:-------------------:|:-------------------------:|
+| Sample  | Nvidia T4 | 2.9x | 1.4x |
+| Sample | Nvidia A100 | 9.1x | 2.0x |
+| **Full** | **Nvidia A100** | **1.9x++** | **8.5x** |
 
-_*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer_  
-_**Full = Avazu CTR Full & Homberger VRPTW 100 customer_  
-_++ = Superior result quality (AUC, Solve Quality, etc.)_
+*Sample = Avazu CTR 50k & Gehring & Homberger VRPTW 200 customer*  
+**Full = Avazu CTR Full & Homberger VRPTW 1000 customer**  
+*++ = Superior result quality*
+
 
 ## 📊 Datasets
 
@@ -49,7 +50,7 @@ source .env
 mkdir classification/data
 mkdir optimization/data
 
-# Avazu CTR dataset - you will need to accept the competition rules and create a kaggle accoutn to access to full ~40M row dataset
+# Avazu CTR dataset - you will need to accept the competition rules and create a kaggle account to access the full ~40M row dataset
 curl -L -C - --fail \
 --user "$KAGGLE_USERNAME:$KAGGLE_KEY" \
 "https://www.kaggle.com/api/v1/competitions/data/download/avazu-ctr-prediction/train.gz" \
@@ -96,7 +97,7 @@ __Note: You may have to reload window for new kernels to showup in your notebook
 ### 5. Run Notebooks
 
 1. **Classification**: Open `classification/ml_cpu_vs_gpu.ipynb` and select `rapids-sk` kernel
-2. **Optimization**: Open `optimization/02_optimization_vrptw.ipynb` and select `cuopt-or` kernel
+2. **Optimization**: Open `optimization/optimization_vrptw.ipynb` and select `cuopt-or` kernel
 
 ---
 
