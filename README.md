@@ -8,7 +8,7 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 
 - **ML - Classification**: pandas → cuDF, sklearn → cuML on Avazu CTR dataset
 - **Optimization**: OR-Tools → cuOpt on VRPTW (Gehring & Homberger dataset)
-- **Solution Parity**: AUC/logloss within ±0.5%, feasible VRPTW solutions
+- **Solution Parity**
 
 ## 🎓 Preliminary Results Summary  
   
@@ -25,17 +25,19 @@ Demonstrated performance gains from GPU based libraries - with minimal migration
 
 ## 📊 Datasets
 
-### Avazu CTR (ETL + ML)
+### Avazu CTR (ML)
 - **Format**: Single Parquet file (~40M rows) or 50k sample
 - **Target**: Binary click prediction (0/1)
 - **Features**: hour_of_day, frequency encoding for categoricals
 - **Models**: Random Forest Classifier (sklearn → cuML)
+- https://www.kaggle.com/datasets/wuyingwen06/avazu-ctr-train
 
 ### Gehring & Homberger VRPTW (Optimization)
 - **Format**: ZIP archives with .txt instance files
 - **Schema**: customer_id, x, y, demand, tw_start, tw_end, service_time
 - **Solvers**: OR-Tools (CPU) → cuOpt (GPU)
 - **Instances**: C2 (200 customers), RC2 (1000 customers)
+- https://www.sintef.no/projectweb/top/vrptw/homberger-benchmark/
 
 ## 🚀 Quick Start
 
